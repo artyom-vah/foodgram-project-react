@@ -32,13 +32,12 @@ class RecipeAdmin(admin.ModelAdmin):
         return ', '.join([
             ingredients.name for ingredients
             in obj.ingredients.all()])
-
     get_ingredients.short_description = 'Ингридиенты'
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    """ Админ панель управление ингридиентами """
+    """Админ панель управление ингридиентами"""
     list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
     list_filter = ('name',)
@@ -47,7 +46,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    """ Админ панель управление тегами """
+    """Админ панель управление тегами"""
     list_display = ('name', 'color', 'slug')
     search_fields = ('name', 'slug')
     list_filter = ('name',)
@@ -56,7 +55,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    """ Админ панель управление подписками """
+    """Админ панель управление подписками"""
     list_display = ('user', 'recipe')
     list_filter = ('user', 'recipe')
     search_fields = ('user', 'recipe')
@@ -65,13 +64,8 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
-    """ Админ панель списка покупок """
+    """Админ панель списка покупок"""
     list_display = ('recipe', 'user')
     list_filter = ('recipe', 'user')
     search_fields = ('user',)
     empty_value_display = '-пусто-'
-
-# admin.site.register(ShoppingCart, ShoppingCartAdmin)
-# admin.site.register(Ingredient, IngredientAdmin)
-# admin.site.register(Tag, TagAdmin)
-# admin.site.register(Favorite, FavoriteAdmin)

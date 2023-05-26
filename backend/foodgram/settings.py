@@ -4,15 +4,10 @@ load_dotenv()
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 SECRET_KEY = os.getenv('TOKEN', 'default-value')
-
 DEBUG = True #os.getenv('DEBUG', default=False)
-
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
-
 AUTH_USER_MODEL = 'users.User'
-
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -30,7 +25,6 @@ INSTALLED_APPS = [
     "drf_yasg",
     "colorfield",
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -62,8 +56,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-
-
 if DEBUG:
     DATABASES = {
         'default': {
@@ -82,7 +74,6 @@ else:
             'PORT': os.getenv('DB_PORT', default='5432')
         }
     }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -139,9 +130,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LENGTH_OF_FIELDS_USER_1 = 150
-
-LENGTH_OF_FIELDS_USER_2 = 254
-
-LENGTH_OF_FIELDS_RECIPES = 200
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
