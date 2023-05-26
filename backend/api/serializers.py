@@ -62,8 +62,7 @@ class SubscribeListSerializer(UserSerializer):
         if user == author:
             raise ValidationError(
                 detail='Нельзя подписаться на самого себя',
-                code=status.HTTP_400_BAD_REQUEST,
-            )
+                code=status.HTTP_400_BAD_REQUEST,)
         return data
 
     def get_recipes_count(self, obj):
@@ -148,13 +147,11 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 class CreateRecipeSerializer(serializers.ModelSerializer):
     """ Сериализатор для создания рецепта """
     ingredients = IngredientRecipeSerializer(
-        many=True,
-    )
+        many=True,)
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Tag.objects.all(),
-        error_messages={'does_not_exist': 'Указанного тега не существует'}
-    )
+        error_messages={'does_not_exist': 'Указанного тега не существует'})
     image = Base64ImageField(max_length=None)
     author = UserSerializer(read_only=True)
     cooking_time = serializers.IntegerField()
@@ -201,9 +198,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 IngredientRecipe(
                     ingredient=ingredient_data.pop('id'),
                     amount=ingredient_data.pop('amount'),
-                    recipe=recipe,
-                )
-            )
+                    recipe=recipe,))
         IngredientRecipe.objects.bulk_create(ingredient_liist)
 
     def create(self, validated_data):
@@ -248,8 +243,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         user = data['user']
         if user.favorites.filter(recipe=data['recipe']).exists():
             raise serializers.ValidationError(
-                'Рецепт уже добавлен в избранное.'
-            )
+                'Рецепт уже добавлен в избранное.')
         return data
 
     def to_representation(self, instance):
@@ -270,8 +264,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         user = data['user']
         if user.shopping_list.filter(recipe=data['recipe']).exists():
             raise serializers.ValidationError(
-                'Рецепт уже добавлен в корзину'
-            )
+                'Рецепт уже добавлен в корзину')
         return data
 
     def to_representation(self, instance):

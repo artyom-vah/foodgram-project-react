@@ -13,6 +13,7 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
 AUTH_USER_MODEL = 'users.User'
 
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
