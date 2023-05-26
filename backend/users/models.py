@@ -35,7 +35,7 @@ class User(AbstractUser):
 
 
 class Follow(models.Model):
-    """ Модель подписки на автора. """
+    """Модель подписки на автора."""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -45,18 +45,19 @@ class Follow(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Подписчик',
-        related_name='following')
+        related_name='following'
+    )
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ('-id', )
         constraints = [
             UniqueConstraint(
                 fields=('user', 'author'),
-                name='unique_follow'),
+                name='unique_follow'
+            ),
             models.CheckConstraint(
                 check=~Q(user=F('author')),
-                name='no_self_follow')
-        ]
+                name='no_self_follow')]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
