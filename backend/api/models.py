@@ -7,16 +7,17 @@ from django.db.models import UniqueConstraint
 
 from users.models import User
 
-LENGTH_OF_FIELDS_RECIPES = 200
+LENGTH_OF_RECIPES = 200
+
 
 class Ingredient(models.Model):
     """Модель ингридиентов."""
     name = models.CharField(
-        max_length=LENGTH_OF_FIELDS_RECIPES,
+        max_length=LENGTH_OF_RECIPES,
         verbose_name='Название ингридиента',
         db_index=True)
     measurement_unit = models.CharField(
-        max_length=LENGTH_OF_FIELDS_RECIPES,
+        max_length=LENGTH_OF_RECIPES,
         verbose_name='Еденицы измерения')
 
     class Meta():
@@ -35,7 +36,7 @@ class Tag(models.Model):
     """Модель тегов"""
     name = models.CharField(
         verbose_name='Название тега',
-        max_length=LENGTH_OF_FIELDS_RECIPES,
+        max_length=LENGTH_OF_RECIPES,
         db_index=True,
         unique=True)
     color = ColorField(
@@ -49,7 +50,7 @@ class Tag(models.Model):
                 message='Проверьте вводимый формат',)],
     )
     slug = models.SlugField(
-        max_length=LENGTH_OF_FIELDS_RECIPES,
+        max_length=LENGTH_OF_RECIPES,
         verbose_name='Slug',
         unique=True)
 
@@ -71,7 +72,7 @@ class Recipe(models.Model):
         related_name='recipes')
     name = models.CharField(
         verbose_name='Название рецепта',
-        max_length=LENGTH_OF_FIELDS_RECIPES,)
+        max_length=LENGTH_OF_RECIPES,)
     image = models.ImageField(
         upload_to='recipes/image/',
         verbose_name='Изображение')
@@ -85,11 +86,12 @@ class Recipe(models.Model):
         verbose_name='Теги')
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время готовки',
-        validators=[MinValueValidator(
-            1, message='Время приготовления не менее 1 минуты!'
-        ), MaxValueValidator(
-            1441, message='Время приготовления не более 24 часов!'
-        )]
+        validators=[
+            MinValueValidator(
+            1, message='Время приготовления не менее 1 минуты!'),
+            MaxValueValidator(
+            1441, message='Время приготовления не более 24 часов!')
+        ]
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации',
@@ -105,7 +107,7 @@ class Recipe(models.Model):
 
 
 class FavoriteShoppingCart(models.Model):
-    """ Связывающая модель списка покупок и избранного. """
+    """Связывающая модель списка покупок и избранного"""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

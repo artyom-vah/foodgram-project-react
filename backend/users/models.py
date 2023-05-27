@@ -4,8 +4,9 @@ from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 
 
-LENGTH_OF_FIELDS_USER_1 = 150
-LENGTH_OF_FIELDS_USER_2 = 254
+LENGTH_OF_USER_1 = 150
+LENGTH_OF_USER_2 = 254
+
 
 class User(AbstractUser):
     """Модель пользователя."""
@@ -14,17 +15,17 @@ class User(AbstractUser):
 
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=LENGTH_OF_FIELDS_USER_1)
+        max_length=LENGTH_OF_USER_1)
     last_name = models.CharField(
-        max_length=LENGTH_OF_FIELDS_USER_1,
+        max_length=LENGTH_OF_USER_1,
         verbose_name='Фамилия',)
     email = models.EmailField(
-        max_length=LENGTH_OF_FIELDS_USER_1,
+        max_length=LENGTH_OF_USER_1,
         verbose_name='email',
         unique=True)
     username = models.CharField(
         verbose_name='username',
-        max_length=LENGTH_OF_FIELDS_USER_2,
+        max_length=LENGTH_OF_USER_2,
         unique=True,
         validators=(UnicodeUsernameValidator(),))
 
@@ -48,8 +49,7 @@ class Follow(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Подписчик',
-        related_name='following'
-    )
+        related_name='following')
 
     class Meta:
         ordering = ('-id', )
