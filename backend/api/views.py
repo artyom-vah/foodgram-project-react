@@ -19,9 +19,12 @@ from users.models import Follow, User
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import AuthorPermission
-from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
-                          IngredientSerializer, RecipeReadSerializer,
-                          ShoppingCartSerializer, SubscribeListSerializer,
+from .serializers import (CreateRecipeSerializer,
+                          FavoriteSerializer,
+                          IngredientSerializer,
+                          RecipeReadSerializer,
+                          ShoppingCartSerializer,
+                          SubscribeListSerializer,
                           TagSerializer, UserSerializer)
 
 
