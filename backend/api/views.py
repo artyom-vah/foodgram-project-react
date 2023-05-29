@@ -73,13 +73,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = f'attachment; filename="{file}.txt"'
         return response
 
+    def add_to_shopping_cart(self, user, recipe):
+        data = {'user': user.id, 'recipe': recipe.id}
+        serializer = ShoppingCartSerializer(data=data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
     @action(detail=False, methods=['GET'])
     def download_shopping_cart(self, request):
         ingredients = IngredientRecipe.objects.filter(
             recipe__shopping_list__user=request.user
         ).order_by('ingredient__name').values(
             'ingredient__name', 'ingredient__measurement_unit'
-        ).annotate(amount=Sum('amount'))
+        ).annotate(total_amount=Sum('amount'))
         return self.send_message(ingredients)
 
     @action(
@@ -87,21 +93,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
         methods=('POST',),
         permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk):
-        context = {'request': request}
         recipe = get_object_or_404(Recipe, id=pk)
-        data = {'user': request.user.id,
-                'recipe': recipe.id}
-        serializer = ShoppingCartSerializer(data=data, context=context)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.add_to_shopping_cart(request.user, recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @shopping_cart.mapping.delete
+    @action(detail=True,
+            methods=['DELETE'],
+            permission_classes=[IsAuthenticated])
     def destroy_shopping_cart(self, request, pk):
-        get_object_or_404(
-            ShoppingCart, user=request.user.id,
-            recipe=get_object_or_404(Recipe, id=pk)
-        ).delete()
+        recipe = get_object_or_404(Recipe, id=pk)
+        ShoppingCart.objects.filter(user=request.user, recipe=recipe).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
@@ -149,9 +150,9 @@ class UserViewSet(UserViewSet):
             Follow.objects.create(user=user, author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
-            get_object_or_404(Follow, user=user, author=author).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        # Если метод не POST, то автоматически считается DELETE
+        get_object_or_404(Follow, user=user, author=author).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def subscriptions(self, request):

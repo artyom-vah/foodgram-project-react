@@ -86,7 +86,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    """Сериализатор просмотра ингридиентов"""
+    """Сериализатор просмотра ингредиентов"""
 
     class Meta:
         model = Ingredient
@@ -94,7 +94,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
-    """Сериализатор связи ингридиентов и рецепта"""
+    """Сериализатор связи ингредиентов и рецепта"""
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all()
     )
@@ -123,10 +123,6 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients',
                   'is_favorited', 'is_in_shopping_cart',
                   'name', 'image', 'text', 'cooking_time')
-
-    def get_ingredients(self, obj):
-        ingredients = IngredientRecipe.objects.filter(recipe=obj)
-        return IngredientRecipeSerializer(ingredients, many=True).data
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -176,11 +172,11 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         ingredients_list = []
         if not ingredients:
             raise serializers.ValidationError(
-                'Отсутствуют ингридиенты')
+                'Отсутствуют ингредиенты')
         for ingredient in ingredients:
             if ingredient['id'] in ingredients_list:
                 raise serializers.ValidationError(
-                    'Ингридиенты должны быть уникальны')
+                    'Ингредиенты должны быть уникальны')
             ingredients_list.append(ingredient['id'])
             if int(ingredient.get('amount')) < 1:
                 raise serializers.ValidationError(

@@ -11,18 +11,18 @@ LENGTH_OF_RECIPES = 200
 
 
 class Ingredient(models.Model):
-    """Модель ингридиентов."""
+    """Модель ингредиентов."""
     name = models.CharField(
         max_length=LENGTH_OF_RECIPES,
-        verbose_name='Название ингридиента',
+        verbose_name='Название ингредиента',
         db_index=True)
     measurement_unit = models.CharField(
         max_length=LENGTH_OF_RECIPES,
         verbose_name='Еденицы измерения')
 
-    class Meta():
-        verbose_name = 'Ингридиенты'
-        verbose_name_plural = 'Ингридиенты'
+    class Meta:
+        verbose_name = 'Ингредиенты'
+        verbose_name_plural = 'Ингредиенты'
         constraints = [
             models.UniqueConstraint(
                 fields=['name', 'measurement_unit'],
@@ -79,7 +79,7 @@ class Recipe(models.Model):
     text = models.TextField(verbose_name='Описание')
     ingredients = models.ManyToManyField(
         Ingredient,
-        verbose_name='Ингридиенты',
+        verbose_name='Ингредиенты',
         through='IngredientRecipe')
     tags = models.ManyToManyField(
         Tag,
@@ -148,7 +148,7 @@ class ShoppingCart(FavoriteShoppingCart):
 
 
 class IngredientRecipe(models.Model):
-    """Ингридиенты рецепта"""
+    """Ингредиенты рецепта"""
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
@@ -166,6 +166,11 @@ class IngredientRecipe(models.Model):
         ordering = ('-id', )
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты рецепта'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ingredient', 'recipe'],
+                name='unique_ingredient_recipe'),
+        ]
 
     def __str__(self):
         return (f'{self.ingredient.name} :: '
