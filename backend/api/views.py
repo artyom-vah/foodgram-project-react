@@ -146,6 +146,7 @@ class UserViewSet(UserViewSet):
         methods=['post', 'delete'],
         permission_classes=[IsAuthenticated], )
     def subscribe(self, request, id):
+        """Подписка на автора /отписка от автора."""
         user = request.user
         author = get_object_or_404(User, pk=id)
 
