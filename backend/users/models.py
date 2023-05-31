@@ -3,7 +3,6 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 
-
 LENGTH_OF_USER_1 = 150
 LENGTH_OF_USER_2 = 254
 

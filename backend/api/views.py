@@ -8,7 +8,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-
 from .models import (Favorite,
                      Ingredient,
                      IngredientRecipe,
@@ -30,7 +29,7 @@ from .serializers import (CreateRecipeSerializer,
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    """ Вывод ингредиентов """
+    """Вывод ингредиентов"""
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -40,7 +39,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
-    """ Вывод тегов """
+    """Вывод тегов"""
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -48,7 +47,7 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    """ Вывод работы с рецептами """
+    """Вывод работы с рецептами"""
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
     permission_classes = (AuthorPermission,)
@@ -84,16 +83,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'ingredient__name', 'ingredient__measurement_unit'
         ).annotate(total_amount=Sum('amount'))
         return self.send_message(ingredients)
-
-    def create_object(request, serializer_class, recipe_id):
-        """Убирает дублирование кода из методов shopping_cart и favorite."""
-        context = {'request': request}
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        data = {'user': request.user.id, 'recipe': recipe.id}
-        serializer = serializer_class(data=data, context=context)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return serializer.data
 
     @action(
         detail=True,
