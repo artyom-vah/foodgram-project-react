@@ -8,24 +8,17 @@ from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-from .models import (Favorite,
-                     Ingredient,
-                     IngredientRecipe,
-                     Recipe,
-                     ShoppingCart,
-                     Tag)
 from users.models import Follow, User
+
 from .filters import IngredientFilter, RecipeFilter
+from .models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                     ShoppingCart, Tag)
 from .pagination import CustomPagination
 from .permissions import AuthorPermission
-from .serializers import (CreateRecipeSerializer,
-                          FavoriteSerializer,
-                          IngredientSerializer,
-                          RecipeReadSerializer,
-                          ShoppingCartSerializer,
-                          SubscribeListSerializer,
-                          TagSerializer,
-                          UserSerializer)
+from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
+                          IngredientSerializer, RecipeReadSerializer,
+                          ShoppingCartSerializer, SubscribeListSerializer,
+                          TagSerializer, UserSerializer)
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
