@@ -126,7 +126,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         data = create_object(request, serializer_class, pk)
         return Response(data, status=status.HTTP_201_CREATED)
 
-
     @favorite.mapping.delete
     def destroy_favorite(self, request, pk):
         """Удаляет рецепт из избранного у текущего пользователя."""
