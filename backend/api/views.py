@@ -75,13 +75,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = f'attachment; filename="{file}.txt"'
         return response
 
-    def add_to_shopping_cart(self, user, recipe):
-        """Убирает дублирование кода из методов shopping_cart и favorite."""
-        data = {'user': user.id, 'recipe': recipe.id}
-        serializer = ShoppingCartSerializer(data=data, context={'request': self.request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
     @action(detail=False, methods=['GET'])
     def download_shopping_cart(self, request):
         """Загружает список покупок в формате текстового файла."""
@@ -92,15 +85,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).annotate(total_amount=Sum('amount'))
         return self.send_message(ingredients)
 
+    def create_object(request, serializer_class, recipe_id):
+        """Убирает дублирование кода из методов shopping_cart и favorite."""
+        context = {'request': request}
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        data = {'user': request.user.id, 'recipe': recipe.id}
+        serializer = serializer_class(data=data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.data
+
     @action(
         detail=True,
         methods=('POST',),
-        permission_classes=[IsAuthenticated])
+        permission_classes=[IsAuthenticated]
+    )
     def shopping_cart(self, request, pk):
         """Добавляет рецепт в корзину покупок пользователя."""
-        recipe = get_object_or_404(Recipe, id=pk)
-        self.add_to_shopping_cart(request.user, recipe)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer_class = ShoppingCartSerializer
+        data = create_object(request, serializer_class, pk)
+        return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=True,
             methods=['DELETE'],
@@ -111,19 +115,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ShoppingCart.objects.filter(user=request.user, recipe=recipe).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
     @action(
         detail=True,
         methods=('POST',),
-        permission_classes=[IsAuthenticated])
+        permission_classes=[IsAuthenticated]
+    )
     def favorite(self, request, pk):
         """Добавляет рецепт в избранное пользователя и в корзину покупок."""
-        recipe = get_object_or_404(Recipe, id=pk)
-        self.add_to_shopping_cart(request.user, recipe)
-        data = {'user': request.user.id, 'recipe': recipe.id}
-        serializer = FavoriteSerializer(data=data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer_class = FavoriteSerializer
+        data = create_object(request, serializer_class, pk)
+        return Response(data, status=status.HTTP_201_CREATED)
+
 
     @favorite.mapping.delete
     def destroy_favorite(self, request, pk):
