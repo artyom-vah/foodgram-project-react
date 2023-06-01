@@ -65,8 +65,8 @@ jobs:
           script: |
             cd infra
             sudo docker-compose down
-            sudo docker pull pashkavrn/foodgram_frontend:latest
-            sudo docker pull pashkavrn/foodgram_backend:latest
+            sudo docker pull artyomvah/foodgram_frontend:latest
+            sudo docker pull artyomvah/foodgram_backend:latest
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
