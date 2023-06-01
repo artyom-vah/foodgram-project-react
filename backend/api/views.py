@@ -77,6 +77,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).annotate(total_amount=Sum('amount'))
         return self.send_message(ingredients)
 
+    def create_object(request, serializer_class, recipe_id):
+        """Убирает дублирование кода из методов shopping_cart и favorite."""
+        context = {'request': request} 
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        data = {'user': request.user.id, 'recipe': recipe.id}
+        serializer = serializer_class(data=data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.data
+
     @action(
         detail=True,
         methods=('POST',),
@@ -88,8 +98,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         data = create_object(request, serializer_class, pk)
         return Response(data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True,
-            methods=['DELETE'],
+    @action(detail=True, methods=['DELETE'],
             permission_classes=[IsAuthenticated])
     def destroy_shopping_cart(self, request, pk):
         """Удаляет рецепт из корзины покупок пользователя."""
@@ -97,11 +106,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ShoppingCart.objects.filter(user=request.user, recipe=recipe).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(
-        detail=True,
-        methods=('POST',),
-        permission_classes=[IsAuthenticated]
-    )
+    @action(detail=True, methods=('POST',),
+            permission_classes=[IsAuthenticated])
     def favorite(self, request, pk):
         """Добавляет рецепт в избранное пользователя и в корзину покупок."""
         serializer_class = FavoriteSerializer
