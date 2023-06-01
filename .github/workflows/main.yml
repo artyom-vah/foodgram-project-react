@@ -18,7 +18,7 @@ jobs:
 
     - name: Install dependencies
       run: | 
-        ython -m pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
         sed -i '1s/^\xEF\xBB\xBF//' setup.cfg
         cd backend/
