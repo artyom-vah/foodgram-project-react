@@ -87,11 +87,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save()
         return serializer.data
 
-    @action(
-        detail=True,
-        methods=('POST',),
-        permission_classes=[IsAuthenticated]
-    )
+    @action(detail=True, methods=('POST',),
+            permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk):
         """Добавляет рецепт в корзину покупок пользователя."""
         serializer_class = ShoppingCartSerializer
