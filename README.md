@@ -353,30 +353,34 @@ sudo docker-compose down
 
 **Пример готового проекта**
 ***Вывод в браузер:***
-![brows_1](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_1.jpg)
-![brows_2](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_2.jpg)
-![brows_3](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_3.jpg)
-![brows_4](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_4.jpg)
-![brows_5](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_5.jpg)
-![brows_6](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_6.jpg)
-![brows_7](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_7.jpg)
-![brows_8](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_8.jpg)
-![brows_9](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/brows_9.jpg)
+![brows_1](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_1.jpg)
+![brows_2](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_2.jpg)
+![brows_3](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_3.jpg)
+![brows_4](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_4.jpg)
+![brows_5](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_5.jpg)
+![brows_6](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_6.jpg)
+![brows_7](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_7.jpg)
+![brows_8](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_8.jpg)
+![brows_9](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/brows_9.jpg)
+<br>
+
 ***Админка:***
-![Admin_1](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_1.jpg)
-![Admin_2](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_2.jpg)
-![Admin_3](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_3.jpg)
-![Admin_4](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_4.jpg)
-![Admin_5](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_5.jpg)
-![Admin_6](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_6.jpg)
-![Admin_7](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_7.jpg)
-![Admin_8](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/admin_8.jpg)
+![Admin_1](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_1.jpg)
+![Admin_2](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_2.jpg)
+![Admin_3](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_3.jpg)
+![Admin_4](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_4.jpg)
+![Admin_5](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_5.jpg)
+![Admin_6](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_6.jpg)
+![Admin_7](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_7.jpg)
+![Admin_8](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/admin_8.jpg)
+<br>
+
 ***api:***
-![api_1](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_1.jpg)
-![api_2](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_2.jpg)
-![api_3](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_3.jpg)
-![api_4](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_4.jpg)
-![api_5](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_5.jpg)
-![api_6](https://github.com/artyom-vah/foodgram-project-react/tree/main/scrins/api_6.jpg)
+![api_1](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_1.jpg)
+![api_2](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_2.jpg)
+![api_3](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_3.jpg)
+![api_4](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_4.jpg)
+![api_5](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_5.jpg)
+![api_6](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_6.jpg)
 <br>
 ***Автор:*** Артем Вахрушев
