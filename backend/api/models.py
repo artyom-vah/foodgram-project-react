@@ -45,7 +45,7 @@ class Tag(models.Model):
         validators=[
             RegexValidator(
                 regex="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-                message='Проверьте вводимый формат',)],
+                message='Проверьте вводимый формат', )],
     )
     slug = models.SlugField(
         max_length=LENGTH_OF_RECIPES,
@@ -70,7 +70,7 @@ class Recipe(models.Model):
         related_name='recipes')
     name = models.CharField(
         verbose_name='Название рецепта',
-        max_length=LENGTH_OF_RECIPES,)
+        max_length=LENGTH_OF_RECIPES, )
     image = models.ImageField(
         upload_to='recipes/image/',
         verbose_name='Изображение')
@@ -86,9 +86,9 @@ class Recipe(models.Model):
         verbose_name='Время готовки',
         validators=[
             MinValueValidator(
-            1, message='Время приготовления не менее 1 минуты!'),
+                1, message='Время приготовления не менее 1 минуты!'),
             MaxValueValidator(
-            1441, message='Время приготовления не более 24 часов!')
+                1441, message='Время приготовления не более 24 часов!')
         ]
     )
     pub_date = models.DateTimeField(
@@ -109,11 +109,11 @@ class FavoriteShoppingCart(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Пользователь',)
+        verbose_name='Пользователь', )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        verbose_name='Рецепт',)
+        verbose_name='Рецепт', )
 
     class Meta:
         abstract = True
@@ -161,7 +161,7 @@ class IngredientRecipe(models.Model):
         verbose_name='Количество ингредиента')
 
     class Meta:
-        ordering = ('-id', )
+        ordering = ('-id',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты рецепта'
         constraints = [
