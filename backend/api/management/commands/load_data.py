@@ -1,8 +1,7 @@
 import json
 
-from django.core.management.base import BaseCommand
-
 from api.models import Ingredient, Tag
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
