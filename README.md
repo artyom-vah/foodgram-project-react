@@ -124,11 +124,12 @@ python manage.py migrate
 
 10. Загружаем данные ингридиентов и тегов для рецептов:
 ```bash
-python manage.py load_data
-# у меня данные загружались где-то 2-3 минуты, поэтому придется подождать
+python manage.py load_tags
 # в консоли будет выведено:
-# Старт команды
-# Данные загружены
+# Все тэги загружены!
+python manage.py load_ingrs
+# в консоли будет выведено:
+# Все ингридиенты загружены!
 ```
 10. В папке с файлом manage.py запустите сервер:
 ```bash
@@ -137,18 +138,7 @@ python manage.py runserver
 11. Проверим работу нашего api:
 ```bash
 http://127.0.0.1:8000/api/
-# в консоли будет выведено:
-# HTTP 200 OK
-# Allow: GET, HEAD, OPTIONS
-# Content-Type: application/json
-# Vary: Accept
-
-# {
-#     "ingredients": "http://127.0.0.1:8000/api/ingredients/",
-#     "tags": "http://127.0.0.1:8000/api/tags/",
-#     "recipes": "http://127.0.0.1:8000/api/recipes/",
-#     "users": "http://127.0.0.1:8000/api/users/"
-# }
+http://127.0.0.1:8000/admin/
 ```
 12. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба:
 ```bash
@@ -171,11 +161,14 @@ frontend:
 # в консоли будет выведено:
 cd backend/
 docker build -t foodgram_backend .
-# [+] Building 42.9s (14/14) FINISHED
-#  => [internal] load build definition from Dockerfile       0.0s 
-#  => => transferring dockerfile: 424B                       0.0s 
-#  => [internal] load .dockerignore                          0.0s 
-#  => => transferring context: 2B    
+# [+] Building 1.9s (10/10) FINISHED
+#  => [internal] load .dockerignore                                                                           0.0s 
+#  => => transferring context: 2B                                                                             0.0s 
+#  => [internal] load build definition from Dockerfile                                                        0.0s 
+#  => => transferring dockerfile: 278B                                                                        0.0s 
+#  => [internal] load metadata for docker.io/library/python:3.9-slim                                          0.6s 
+#  => [1/5] FROM docker.io/library/python:3.9-slim@sha256:5cde4e147c4165ad8dbf8a4df9631863766eeb0b79b890fafe  0.0s 
+#  => [internal] load build context                         
 #  ...
 #  => => naming to docker.io/library/foodgram_backend  
 
@@ -209,18 +202,19 @@ docker-compose up -d --build
 далее при следующих запусках выполнении команды:
 docker-compose up -d --build 
 # в консоли будет выведено:
-# [+] Running 4/4
-#  ✔ Container infra-db-1         Started    2.4s 
-#  ✔ Container foodgram_backend   Started    2.5s 
-#  ✔ Container foodgram_frontend  Started    2.7s 
-#  ✔ Container foodgram_nginx     Started    2.8s 
+# [+] Running 5/5
+#  ✔ Network infra_default       Created         0s 
+#  ✔ Container infra-db-1        Started         8s 
+#  ✔ Container infra-backend-1   Started       1.3s 
+#  ✔ Container infra-frontend-1  Started       2.0s 
+#  ✔ Container infra-nginx-1     Started       3.1s 
 ```
 
 15. Соберем статику:
 ```bash
 docker-compose exec backend python manage.py collectstatic --no-input
 # в консоли будет выведено:
-# 195 static files copied to '/app/static'.
+# 160 static files copied to '/app/static'.
 ```
 
 
@@ -252,11 +246,11 @@ http://localhost/signin
 docker-compose down
 # в консоли будет выведено:
 # [+] Running 5/5
-#  ✔ Container foodgram_frontend  Removed   0.0s
-#  ✔ Container foodgram_nginx     Removed   0.5s
-#  ✔ Container foodgram_backend   Removed   0.6s
-#  ✔ Container infra-db-1         Removed   0.5s
-#  ✔ Network infra_default        Removed  
+#  ✔ Container infra-nginx-1     Removed              0.5s 
+#  ✔ Container infra-frontend-1  Removed              0.0s 
+#  ✔ Container infra-backend-1   Removed              10.3s 
+#  ✔ Container infra-db-1        Removed              0.0s 
+#  ✔ Network infra_default       Removed              0.3s 
 ```
 <br>
 
@@ -339,7 +333,7 @@ sudo apt install docker-compose # подтверждаем Yes
 # я копировал файлы с локального компа на удаленный сервер так:
 scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@51.250.87.151:~/
 
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\nginx.conf" helllsin@51.250.87.151:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.250.87.151:~/
 ```
 
 8. Собираем контейнеры, при помощи docker-compose:
@@ -358,6 +352,13 @@ sudo docker-compose up -d --build
 ```bash
 sudo docker-compose exec backend python manage.py migrate
 sudo docker-compose exec backend python manage.py createsuperuser
+# создаем админа:
+# Email:adm@mail.ru
+# Имя пользователя: adm
+# Имя: adm
+# Password: adm
+# Password (again):  adm
+
 sudo docker-compose exec backend python manage.py collectstatic --no-input
 sudo docker-compose exec backend python manage.py load_data
 ```
@@ -367,11 +368,11 @@ sudo docker-compose exec backend python manage.py load_data
 sudo docker-compose down
 # в консоли будет выведено:
 # [+] Running 5/4
-#  ✔ Container foodgram_frontend  Removed                                    0.3s
-#  ✔ Container foodgram_nginx     Removed                                    0.7s
-#  ✔ Container foodgram_backend   Removed                                    0.8s
-#  ✔ Container helllsin-db-1      Removed                                    0.1s
-#  ✔ Network helllsin_default     Removed                                    0.1s
+#  ✔ Container infra-nginx-1      Removed                                    0.3s
+#  ✔ Container infra-frontend-1   Removed                                    0.7s
+#  ✔ Container infra-backend-1    Removed                                    0.8s
+#  ✔ Container infra-db-1         Removed                                    0.1s
+#  ✔ Network infra_default        Removed                                    0.1s
 ```
 
 **Пример готового проекта**

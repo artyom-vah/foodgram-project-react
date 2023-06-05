@@ -1,20 +1,7 @@
-FROM python:3.10-slim
-
-WORKDIR /app
-
+FROM python:3.9-slim
+WORKDIR /code
 COPY requirements.txt .
-
-RUN apt-get update
-
-RUN apt-get upgrade -y
-
-RUN pip install --upgrade pip
-
-RUN pip install -r requirements.txt
-
-COPY . .
-
-# RUN apt-get update && apt-get upgrade -y && \
-#     pip install --upgrade pip && pip install -r requirements.txt
-
-CMD ["gunicorn", "foodgram.wsgi:application", "--bind", "0:8000" ]
+RUN apt-get update && apt-get upgrade -y && \
+    pip install --upgrade pip && pip install -r requirements.txt
+COPY . ./
+CMD gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000

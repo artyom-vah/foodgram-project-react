@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('TOKEN', 'default-value')
-DEBUG = os.getenv('DEBUG', default=True)
+DEBUG = os.getenv('DEBUG', default=False)
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
+
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
@@ -77,6 +77,7 @@ else:
         }
     }
 
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -106,7 +107,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.LimitPageNumberPagination',
     'PAGE_SIZE': 6,
 }
-
 
 LANGUAGE_CODE = 'ru-RU'
 
