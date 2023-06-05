@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
+    """Модель ингредиентов."""
     name = models.CharField(
         'Название ингредиента',
         max_length=200)
@@ -25,6 +26,8 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
+
+    """Модель тегов."""
     name = models.CharField(
         'Имя',
         max_length=60,
@@ -48,6 +51,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
+    """Модель рецептов."""
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -90,6 +94,7 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
+    """Ингредиенты рецепта."""
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -116,6 +121,7 @@ class RecipeIngredient(models.Model):
 
 
 class Subscribe(models.Model):
+    """Подписка пользователя на автора рецепта."""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -144,6 +150,7 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
+    """Модель добавление рецепта в избраное."""
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -164,13 +171,13 @@ class FavoriteRecipe(models.Model):
         return f'Пользователь {self.user} добавил {list_} в избранные.'
 
     @receiver(post_save, sender=User)
-    def create_favorite_recipe(
-            sender, instance, created, **kwargs):
+    def create_favorite_recipe(self, instance, created, **kwargs):
         if created:
             return FavoriteRecipe.objects.create(user=instance)
 
 
 class ShoppingCart(models.Model):
+    """Модель списка покупок."""
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -192,7 +199,7 @@ class ShoppingCart(models.Model):
         return f'Пользователь {self.user} добавил {list_} в покупки.'
 
     @receiver(post_save, sender=User)
-    def create_shopping_cart(
-            sender, instance, created, **kwargs):
+    def create_shopping_cart(self, instance, created, **kwargs):
+        """Создает объект корзину для покупок при создании пользователя."""
         if created:
             return ShoppingCart.objects.create(user=instance)
