@@ -7,7 +7,7 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('TOKEN', 'default-value')
-DEBUG = True  # os.getenv('DEBUG', default=True)
+DEBUG = os.getenv('DEBUG', default=True)
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 AUTH_USER_MODEL = 'users.User'
 
@@ -18,11 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
-    
-    'djoser',    
+
+    'djoser',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',

@@ -1,7 +1,8 @@
-﻿from django.core.exceptions import ValidationError
-import django_filters as filters
+﻿import django_filters as filters
+from django.core.exceptions import ValidationError
 
 from users.models import User
+
 from .models import Ingredient, Recipe
 
 
