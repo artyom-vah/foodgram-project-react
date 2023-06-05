@@ -340,11 +340,26 @@ scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.25
 ```bash
 sudo docker-compose up -d --build
 # в консоли будет выведено:
-# [+] Running 4/4
-#  ✔ Container helllsin-db-1      Started                                    1.1s
-#  ✔ Container foodgram_frontend  Started                                    2.4s
-#  ✔ Container foodgram_backend   Running                                    0.0s
-#  ✔ Container foodgram_nginx     Started                                    2.6s
+# [+] Running 9/9
+#  ✔ db 8 layers [⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                        7.9s
+#    ✔ 8921db27df28 Pull complete                                            0.7s
+#    ✔ eb286326f602 Pull complete                                            0.9s
+#    ✔ 63139c77dd7e Pull complete                                            1.1s
+#    ✔ 17baeacd3984 Pull complete                                            4.9s
+#    ✔ 5f08b9782916 Pull complete                                            5.0s
+#    ✔ a836be7ad658 Pull complete                                            5.1s
+#    ✔ 1966853affaf Pull complete                                            5.1s
+#    ✔ 4dc6d2c8dede Pull complete                                            5.2s
+# [+] Building 0.0s (0/0)
+# [+] Running 8/8
+#  ✔ Volume "helllsin_data_value"   Create...                                0.0s
+#  ✔ Container helllsin-db-1        Started                                  4.6s
+#  ✔ Container foodgram_backend     Recreate...                              0.9s
+#  ✔ Container foodgram_frontend    Recreat...                               0.4s
+#  ✔ Container foodgram_nginx       Recreated                                0.9s
+#  ✔ Container helllsin-backend-1   Starte...                                0.6s
+#  ✔ Container helllsin-frontend-1  Start...                                 0.9s
+#  ✔ Container helllsin-nginx-1     Started                                  2.2s
 
 ```
 
