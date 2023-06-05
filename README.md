@@ -36,13 +36,13 @@ http://51.250.87.151/change-password - Изменить пароль
 далее виртуалка на яндекс облаке будет удалена и ссылки станут недоступны
 ```
 
-### Для проверки работы сайта были добавлены админ и 3 пользователя:
-***Админ:***
+## Для проверки работы сайта были добавлены админ и 3 пользователя:
+#### ***Админ:***
 ````
 почта: adm@mail.ru
 пароль: adm
 ````
-***Пользователи:***
+#### ***Пользователи:***
 ```
 почта: test1@mail.ru
 пароль: testtest77
@@ -98,7 +98,7 @@ touch .env
 ```
 7. В нем прописываем 
 ```bash
-TOKEN=p&l%385148kslhtyn^ #тут можно прописать любой токен
+TOKEN=TOKEN123 #тут можно прописать любой токен
 DEBUG=False
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
@@ -118,12 +118,14 @@ DEBUG = True # os.getenv('DEBUG', default=True)
 9. Переходим в папку backend/ производим миграции:  
 ```bash
 cd backend/
+python manage.py makemigrations 
 python manage.py migrate
 ```
 
 10. Загружаем данные ингридиентов и тегов для рецептов:
 ```bash
 python manage.py load_data
+# у меня данные загружались где-то 2-3 минуты, поэтому придется подождать
 # в консоли будет выведено:
 # Старт команды
 # Данные загружены
@@ -170,9 +172,9 @@ frontend:
 cd backend/
 docker build -t foodgram_backend .
 # [+] Building 42.9s (14/14) FINISHED
-#  => [internal] load build definition from Dockerfile                                                                    0.0s 
-#  => => transferring dockerfile: 424B                                                                                    0.0s 
-#  => [internal] load .dockerignore                                                                                       0.0s 
+#  => [internal] load build definition from Dockerfile       0.0s 
+#  => => transferring dockerfile: 424B                       0.0s 
+#  => [internal] load .dockerignore                          0.0s 
 #  => => transferring context: 2B    
 #  ...
 #  => => naming to docker.io/library/foodgram_backend  
@@ -182,41 +184,46 @@ cd frontend/
 docker build -t foodgram_frontend .
 # в консоли будет выведено:
 # [+] Building 4.8s (12/12) FINISHED
-#  => [internal] load build definition from Dockerfile                                                                    0.0s 
-#  => => transferring dockerfile: 201B                                                                                    0.0s 
+#  => [internal] load build definition from Dockerfile       0.0s 
+#  => => transferring dockerfile: 201B                       0.0s 
 #  => [internal] load .dockerignore    
 #  ...
 #   => => naming to docker.io/library/foodgram_frontend   
 ```
 
-14. Переходим в папку infra/, cоберем статику:
+14. Переходим в папку infra/ пересобераем контейнеры и запускаем их 
 ```bash
 cd infra/
+docker-compose up -d --build
+# Первый раз в консоли будет выведено:
+# [+] Running 15/2
+#  ✔ nginx 5 layers [⣿⣿⣿⣿⣿]     0B/0B     Pulled     9.5s 
+#  ✔ db 8 layers [⣿⣿⣿⣿⣿⣿⣿⣿]    0B/0B     Pulled     8.9s 
+# [+] Running 5/5
+#  ✔ Network infra_default        Created    0.1s 
+#  ✔ Container infra-db-1         Started    2.6s 
+#  ✔ Container foodgram_frontend  Started    1.6s 
+#  ✔ Container foodgram_backend   Started    1.4s 
+#  ✔ Container foodgram_nginx     Started 
+
+далее при следующих запусках выполнении команды:
+docker-compose up -d --build 
+# в консоли будет выведено:
+# [+] Running 4/4
+#  ✔ Container infra-db-1         Started    2.4s 
+#  ✔ Container foodgram_backend   Started    2.5s 
+#  ✔ Container foodgram_frontend  Started    2.7s 
+#  ✔ Container foodgram_nginx     Started    2.8s 
+```
+
+15. Соберем статику:
+```bash
 docker-compose exec backend python manage.py collectstatic --no-input
 # в консоли будет выведено:
 # 195 static files copied to '/app/static'.
 ```
 
-15. Пересобераем контейнеры и запускаем их 
-```bash
-docker-compose up -d --build
-# в консоли будет выведено:
-# [+] Running 5/5
-#  ✔ Network infra_default        Created                                                                                 0.0s 
-#  ✔ Container infra-db-1         Started                                                                                 0.8s 
-#  ✔ Container foodgram_backend   Started                                                                                 1.4s 
-#  ✔ Container foodgram_frontend  Started                                                                                 1.6s 
-#  ✔ Container foodgram_nginx     Started 
 
-далее при следующем выполнении команды:
-docker-compose up -d --build 
-# в консоли будет выведено:
-# [+] Running 4/4
-#  ✔ Container infra-db-1         Started                                                                                 2.4s 
-#  ✔ Container foodgram_backend   Started                                                                                 2.5s 
-#  ✔ Container foodgram_frontend  Started                                                                                 2.7s 
-#  ✔ Container foodgram_nginx     Started                                                                                 2.8s 
-```
 
 16.  Переходим по адресу:
 ```bash
@@ -238,6 +245,18 @@ http://localhost/signin
  Электронная почта: test@mail.ru
  Пароль: 11test11
 # Далее уже заходим, добавляем рецепты и пользуемся сайтом в свое удовольствие!
+```
+
+19. Остановка проекта, удаляем все контейнеры:
+```bash
+docker-compose down
+# в консоли будет выведено:
+# [+] Running 5/5
+#  ✔ Container foodgram_frontend  Removed   0.0s
+#  ✔ Container foodgram_nginx     Removed   0.5s
+#  ✔ Container foodgram_backend   Removed   0.6s
+#  ✔ Container infra-db-1         Removed   0.5s
+#  ✔ Network infra_default        Removed  
 ```
 <br>
 

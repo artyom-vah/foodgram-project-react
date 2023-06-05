@@ -1,10 +1,16 @@
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework import permissions
 
 
-class AuthorPermission(BasePermission):
-    """Делаем так, чтобы изменять и добавлять объекты
-       мог только их автор"""
-
+class IsAuthorOrAdminOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return (request.method in SAFE_METHODS
-                or obj.author == request.user)
+        return (
+            obj.author == request.user
+            or request.method in permissions.SAFE_METHODS
+            or request.user.is_superuser)
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_staff)
