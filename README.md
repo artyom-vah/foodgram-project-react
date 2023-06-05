@@ -328,7 +328,7 @@ sudo apt install docker.io # подтверждаем Yes
 sudo apt install docker-compose # подтверждаем Yes
 ```
 
-7. Копируем файл docker-compose.yml и nginx.conf на удаленный сервер:
+7. Копируем файл docker-compose.yml и default.conf на удаленный сервер:
 ```bash
 # я копировал файлы с локального компа на удаленный сервер так:
 scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@51.250.87.151:~/
@@ -368,14 +368,20 @@ sudo docker-compose up -d --build
 sudo docker-compose exec backend python manage.py migrate
 sudo docker-compose exec backend python manage.py createsuperuser
 # создаем админа:
-# Email:adm@mail.ru
-# Имя пользователя: adm
-# Имя: adm
-# Password: adm
-# Password (again):  adm
+# Email:               adm@mail.ru
+# Имя пользователя:    adm
+# Имя:                 adm
+# Password:            adm
+# Password (again):    adm
 
 sudo docker-compose exec backend python manage.py collectstatic --no-input
-sudo docker-compose exec backend python manage.py load_data
+
+sudo docker-compose exec backend python manage.py load_tags
+# в консоли будет выведено:
+# Все тэги загружены!
+sudo docker-compose exec backend python manage.py load_ingrs
+# в консоли будет выведено:
+# Все ингридиенты загружены!
 ```
 
 10. Остановка проекта, удаляем все контейнеры:
