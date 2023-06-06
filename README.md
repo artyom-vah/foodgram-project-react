@@ -365,33 +365,39 @@ scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@51.250.10.187
 ```bash
 sudo docker-compose up -d --build
 # в консоли будет выведено:
-# [+] Running 9/9
-#  ✔ db 8 layers [⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                        7.9s
-#    ✔ 8921db27df28 Pull complete                                            0.7s
-#    ✔ eb286326f602 Pull complete                                            0.9s
-#    ✔ 63139c77dd7e Pull complete                                            1.1s
-#    ✔ 17baeacd3984 Pull complete                                            4.9s
-#    ✔ 5f08b9782916 Pull complete                                            5.0s
-#    ✔ a836be7ad658 Pull complete                                            5.1s
-#    ✔ 1966853affaf Pull complete                                            5.1s
-#    ✔ 4dc6d2c8dede Pull complete                                            5.2s
+# [+] Running 15/15
+#  ✔ db 8 layers [⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                  10.3s
+#    ✔ 8921db27df28 Pull complete                                                                      1.5s
+#    ✔ eb286326f602 Pull complete                                                                      1.6s
+#    ✔ 63139c77dd7e Pull complete                                                                      1.8s
+#    ✔ 17baeacd3984 Pull complete                                                                      7.5s
+#    ✔ 5f08b9782916 Pull complete                                                                      7.7s
+#    ✔ a836be7ad658 Pull complete                                                                      7.9s
+#    ✔ 1966853affaf Pull complete                                                                      8.0s
+#    ✔ 4dc6d2c8dede Pull complete                                                                      8.1s
+#  ✔ nginx 5 layers [⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                   9.9s
+#    ✔ bb79b6b2107f Pull complete                                                                      3.8s
+#    ✔ 111447d5894d Pull complete                                                                      6.1s
+#    ✔ a95689b8e6cb Pull complete                                                                      6.5s
+#    ✔ 1a0022e444c2 Pull complete                                                                      7.5s
+#    ✔ 32b7488a3833 Pull complete                                                                      7.7s
 # [+] Building 0.0s (0/0)
-# [+] Running 8/8
-#  ✔ Volume "helllsin_data_value"   Create...                                0.0s
-#  ✔ Container helllsin-db-1        Started                                  4.6s
-#  ✔ Container foodgram_backend     Recreate...                              0.9s
-#  ✔ Container foodgram_frontend    Recreat...                               0.4s
-#  ✔ Container foodgram_nginx       Recreated                                0.9s
-#  ✔ Container helllsin-backend-1   Starte...                                0.6s
-#  ✔ Container helllsin-frontend-1  Start...                                 0.9s
-#  ✔ Container helllsin-nginx-1     Started                                  2.2s
-
+# [+] Running 9/9
+#  ✔ Network helllsin_default         Created                                                          0.1s
+#  ✔ Volume "helllsin_static_value"   Created                                                          0.0s
+#  ✔ Volume "helllsin_media_value"    Created                                                          0.0s
+#  ✔ Volume "helllsin_postgres_data"  Created                                                          0.0s
+#  ✔ Volume "helllsin_data_value"     Created                                                          0.0s
+#  ✔ Container helllsin-db-1          Started                                                          4.6s
+#  ✔ Container helllsin-backend-1     Started                                                          3.5s
+#  ✔ Container helllsin-frontend-1    Started                                                          3.9s
+#  ✔ Container helllsin-nginx-1       Started                                                          4.8s
 ```
 
 9. Выполняем команды:
 ```bash
-sudo docker-compose exec backend python manage.py migrate
 sudo docker-compose exec backend python manage.py makemigrations
+sudo docker-compose exec backend python manage.py migrate
 sudo docker-compose exec backend python manage.py createsuperuser
 # создаем админа:
 # Email:               adm@mail.ru
@@ -401,13 +407,12 @@ sudo docker-compose exec backend python manage.py createsuperuser
 # Password (again):    adm
 
 sudo docker-compose exec backend python manage.py collectstatic --no-input
+# 160 static files copied to '/code/static'.
 
 sudo docker-compose exec backend python manage.py load_tags
-# в консоли будет выведено:
 # Все тэги загружены!
 
 sudo docker-compose exec backend python manage.py load_ingrs
-# в консоли будет выведено:
 # Все ингридиенты загружены!
 ```
 
