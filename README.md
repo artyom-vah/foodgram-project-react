@@ -361,7 +361,30 @@ scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.25
 scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@51.250.10.187:~/
 ```
 
-8. Собираем контейнеры, при помощи docker-compose:
+8. Выполняем данные команды т.к. у нас установилась старая версия docker-compose
+```bash
+# скорее всего вылезет такая ошибка:
+ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using 
+the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service 
+definitions under the `services` key, or omit the `version` key and place your service definitions at the root
+of the file to use version 1.
+
+# Удаляем остатки предыдущей установки Docker Compose:
+sudo rm /usr/local/bin/docker-compose
+
+# проверяем что файл Docker Compose не существует:
+ls -l /usr/local/bin/docker-compose
+
+# Загружаем и установите новую версию Docker Compose:
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Проверяем новую версию Docker Compose:
+docker-compose --version 
+# даже если версия осталась старой, можно после выполнения всех этих комад попробовать запустить sudo docker-compose up -d --build, если не сработает гуглим.
+```
+
+9. Собираем контейнеры, при помощи docker-compose:
 ```bash
 sudo docker-compose up -d --build
 # в консоли будет выведено:
@@ -394,7 +417,7 @@ sudo docker-compose up -d --build
 #  ✔ Container helllsin-nginx-1       Started                                                          4.8s
 ```
 
-9. Выполняем команды:
+10. Выполняем команды:
 ```bash
 sudo docker-compose exec backend python manage.py makemigrations
 sudo docker-compose exec backend python manage.py migrate
@@ -416,7 +439,7 @@ sudo docker-compose exec backend python manage.py load_ingrs
 # Все ингридиенты загружены!
 ```
 
-10. Остановка проекта, удаляем все контейнеры:
+11. Остановка проекта, удаляем все контейнеры:
 ```bash
 sudo docker-compose down
 # в консоли будет выведено:
