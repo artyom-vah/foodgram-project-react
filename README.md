@@ -21,16 +21,16 @@ Foodgram поможет вам наслаждаться гастрономиче
 
 ## Проект доступен по ссылкам (для ревьюера):
 ```
-http://51.250.87.151/admin - Админка (обращаю внимание что надо вводить почту и пароль чтобы войти в админку)
-http://51.250.87.151/api/ - api для данного сервиса
-http://51.250.87.151/signup - Создать аккаунт
-http://51.250.87.151/signin - Вход/Выход
-http://51.250.87.151/recipes - рецепты
-http://51.250.87.151/subscriptions - подписки
-http://51.250.87.151/recipes/create - создать рецепт
-http://51.250.87.151/favorites - Избранное
-http://51.250.87.151/cart - Список покупок
-http://51.250.87.151/change-password - Изменить пароль
+http://51.250.10.187/admin - Админка (обращаю внимание что надо вводить почту и пароль чтобы войти в админку)
+http://51.250.10.187/api/ - api для данного сервиса
+http://51.250.10.187/signup - Создать аккаунт
+http://51.250.10.187/signin - Вход/Выход
+http://51.250.10.187/recipes - рецепты
+http://51.250.10.187/subscriptions - подписки
+http://51.250.10.187/recipes/create - создать рецепт
+http://51.250.10.187/favorites - Избранное
+http://51.250.10.187/cart - Список покупок
+http://51.250.10.187/change-password - Изменить пароль
 
 * - примечание: данные ссылки будут работать 2-3 дня после пуша на мой github, 
 далее виртуалка на яндекс облаке будет удалена и ссылки станут недоступны
@@ -106,7 +106,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-ALLOWED_HOSTS=* #51.250.87.151
+ALLOWED_HOSTS=* #51.250.10.187
 TIME_ZONE=UTC
 USE_TZ=True
 # * - примечание: хост должен быть ALLOWED_HOSTS=*
@@ -233,22 +233,22 @@ docker-compose exec backend python manage.py collectstatic --no-input
 # 160 static files copied to '/app/static'.
 ```
 
-14. Загружаем теги и ингридиенты:
+15. Загружаем теги и ингридиенты:
 ```bash
 docker-compose exec backend python manage.py load_tags
 # Все тэги загружены!
 docker-compose exec backend python manage.py load_ingrs
 # Все ингридиенты загружены!
 ```
-15. Переходим по адресу чтобы увидеть работу нашего сайта:
+16. Переходим по адресу чтобы увидеть работу нашего сайта:
 ```bash
 http://127.0.0.1/signin
 ```
-16. Документация к API доступнапо адресу:
+17. Документация к API доступнапо адресу:
 ```bash
 http://127.0.0.1/api/docs/
 ```
-17. Создаем любой аккаунт, вводим: 
+18. Создаем любой аккаунт, вводим: 
 ```bash
 # Например:
 Имя: test
@@ -257,7 +257,7 @@ http://127.0.0.1/api/docs/
 Адрес электронной почты: test@mail.ru
 Пароль: 11test11
 ```
-18.  Авторизуемся:
+19.  Авторизуемся:
 ```bash
 # Например:
  Электронная почта: test@mail.ru
@@ -265,7 +265,7 @@ http://127.0.0.1/api/docs/
 # Далее уже заходим, добавляем рецепты и пользуемся сайтом в свое удовольствие!
 ```
 
-19. Остановка проекта, удаление всех контейнеров:
+20. Остановка проекта, удаление всех контейнеров:
 ```bash
 docker-compose down
 # в консоли будет выведено:
@@ -295,15 +295,23 @@ docker-compose down
 
 *****Если у вас заработал сайт на локальном компе и вы поняли как его запускть, это значит уже проделана половина работы!*****
 
-1. Создаем новую виртуальную машину Ubuntu 20.04 и делаем ваш 'Публичный IPv4' статичным.
+1. Создаем новую виртуальную машину Ubuntu 20.04 и делаем ваш 'Публичный IPv4' статическим.
+   
+2. Выполняем данные команды обновляем пакеты и устанавливаем docker и docker-compose на наш удаленный сервер:
+```bash
+sudo apt update
+sudo apt upgrade -y 
+sudo apt install docker.io # подтверждаем Yes
+sudo apt install docker-compose # подтверждаем Yes
+```
 
 2. На github добавляем все нужные секреты:
 ```bash
 DOCKER_PASSWORD
 DOCKER_USERNAME
-HOST
-PASSPHRASE
-SSH_KEY
+HOST # это наш - Публичный IPv4 51.250.10.187
+PASSPHRASE  
+SSH_KEY # его узнаем на локально компе cat ~/.ssh/id_rsa
 TELEGRAM_TO
 TELEGRAM_TOKEN
 USER
@@ -325,7 +333,7 @@ ALLOWED_HOSTS=Публичный IPv4
 # POSTGRES_PASSWORD=postgres
 # DB_HOST=db
 # DB_PORT=5432
-# ALLOWED_HOSTS=51.250.87.151
+# ALLOWED_HOSTS=51.250.10.187
 # TIME_ZONE=UTC
 # USE_TZ=True
 ```
@@ -344,20 +352,15 @@ frontend:
   ...
 ```
 
-6. Выполняем данные команды обновляем пакеты и устанавливаем docker и   docker-compose на наш сервер:
-```bash
-sudo apt update
-sudo apt upgrade -y 
-sudo apt install docker.io # подтверждаем Yes
-sudo apt install docker-compose # подтверждаем Yes
-```
 
 7. Копируем файл docker-compose.yml и default.conf на удаленный сервер:
 ```bash
 # я копировал файлы с локального компа на удаленный сервер так:
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@51.250.87.151:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@51.250.10.187:~/
 
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.250.87.151:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.250.10.187:~/
+
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@51.250.10.187:~/
 ```
 
 8. Собираем контейнеры, при помощи docker-compose:
@@ -390,6 +393,7 @@ sudo docker-compose up -d --build
 9. Выполняем команды:
 ```bash
 sudo docker-compose exec backend python manage.py migrate
+sudo docker-compose exec backend python manage.py makemigrations
 sudo docker-compose exec backend python manage.py createsuperuser
 # создаем админа:
 # Email:               adm@mail.ru
@@ -453,30 +457,3 @@ sudo docker-compose down
 ![api_6](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_6.jpg)
 <br>
 ***Автор:*** Артем Вахрушев
-
-
-9. Переходим в папку backend/ производим миграции:  
-```bash
-cd backend/
-python manage.py makemigrations 
-python manage.py migrate
-```
-
-10. Загружаем данные ингридиентов и тегов для рецептов:
-```bash
-python manage.py load_tags
-# в консоли будет выведено:
-# Все тэги загружены!
-python manage.py load_ingrs
-# в консоли будет выведено:
-# Все ингридиенты загружены!
-```
-10. В папке с файлом manage.py запустите сервер:
-```bash
-python manage.py runserver
-```
-11. Проверим работу нашего api:
-```bash
-http://127.0.0.1:8000/api/
-http://127.0.0.1:8000/admin/
-```
