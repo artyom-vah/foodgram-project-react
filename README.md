@@ -61,7 +61,7 @@ http://51.250.10.187/change-password - Изменить пароль
 
 
 ## Инструкции по установке: 
-#### ***1. Установка на локальную машину (на ваш ПК)***
+#### ***1й этап - Установка на локальную машину (на ваш ПК)***
 
 1. Клонируйте репозиторий и перейдите в него в командной строке:
 ```bash
@@ -278,8 +278,7 @@ docker-compose down
 ```
 <br>
 
-#### 
-***2. Установка на виртуальную машину Яндекс.Облако(Ubuntu 20.04)***
+#### ***2й этап. Установка на виртуальную машину Яндекс.Облако(Ubuntu 20.04)***
 ```
 Для тех, кто обучается на Яндекс.Практикуме по направлению Python-разработчик, этот проект стал наиболее сложным среди всех, 
 которые я выполнял здесь. Мне потребовалось значительное количество времени, чтобы разобраться с ним, особенно в отношении
@@ -305,7 +304,7 @@ sudo apt install docker.io # подтверждаем Yes
 sudo apt install docker-compose # подтверждаем Yes
 ```
 
-2. На github добавляем все нужные секреты:
+3. На github добавляем все нужные секреты:
 ```bash
 DOCKER_PASSWORD
 DOCKER_USERNAME
@@ -316,12 +315,12 @@ TELEGRAM_TO
 TELEGRAM_TOKEN
 USER
 ```
-3. В файле settings.py у переменной DEBUG меняем значение:
+4. В файле settings.py у переменной DEBUG меняем значение:
 ```bash
 DEBUG = os.getenv('DEBUG', default=False)
 ```
 
-4. В файле .env прорисываем в переменной ALLOWED_HOSTS ваш 'Публичный IPv4'
+5. В файле .env прорисываем в переменной ALLOWED_HOSTS ваш 'Публичный IPv4'
 ```bash
 ALLOWED_HOSTS=Публичный IPv4
 у меня этот файл такой:
@@ -338,7 +337,7 @@ ALLOWED_HOSTS=Публичный IPv4
 # USE_TZ=True
 ```
 
-5. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба, лучше выложить на ваш dockerhub, создать и прописать свои образы:
+6. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба, лучше выложить на ваш dockerhub, создать и прописать свои образы:
 ```bash
 # Должно быть так:
 ...
@@ -351,7 +350,6 @@ frontend:
 #   image: foodgram_frontend # для запуская на локальном компе
   ...
 ```
-
 
 7. Копируем файл docker-compose.yml и default.conf на удаленный сервер:
 ```bash
@@ -407,6 +405,7 @@ sudo docker-compose exec backend python manage.py collectstatic --no-input
 sudo docker-compose exec backend python manage.py load_tags
 # в консоли будет выведено:
 # Все тэги загружены!
+
 sudo docker-compose exec backend python manage.py load_ingrs
 # в консоли будет выведено:
 # Все ингридиенты загружены!
