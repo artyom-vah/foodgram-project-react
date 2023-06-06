@@ -106,7 +106,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-ALLOWED_HOSTS=*
+ALLOWED_HOSTS=* #51.250.87.151
 TIME_ZONE=UTC
 USE_TZ=True
 # * - примечание: хост должен быть ALLOWED_HOSTS=*
@@ -115,32 +115,7 @@ USE_TZ=True
 ```bash
 DEBUG = True # os.getenv('DEBUG', default=True)
 ```
-9. Переходим в папку backend/ производим миграции:  
-```bash
-cd backend/
-python manage.py makemigrations 
-python manage.py migrate
-```
-
-10. Загружаем данные ингридиентов и тегов для рецептов:
-```bash
-python manage.py load_tags
-# в консоли будет выведено:
-# Все тэги загружены!
-python manage.py load_ingrs
-# в консоли будет выведено:
-# Все ингридиенты загружены!
-```
-10. В папке с файлом manage.py запустите сервер:
-```bash
-python manage.py runserver
-```
-11. Проверим работу нашего api:
-```bash
-http://127.0.0.1:8000/api/
-http://127.0.0.1:8000/admin/
-```
-12. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба:
+9. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба:
 ```bash
 # Должно быть так:
 ...
@@ -156,7 +131,7 @@ frontend:
 и докеркомпоус.
 ```
 
-13. Запустим докер-файлы backend и frontend:
+10. Запустим докер-файлы backend и frontend:
 ```bash
 # в консоли будет выведено:
 cd backend/
@@ -184,7 +159,7 @@ docker build -t foodgram_frontend .
 #   => => naming to docker.io/library/foodgram_frontend   
 ```
 
-14. Переходим в папку infra/ пересобераем контейнеры и запускаем их 
+11. Переходим в папку infra/ пересобераем контейнеры и запускаем их 
 ```bash
 cd infra/
 docker-compose up -d --build
@@ -209,22 +184,71 @@ docker-compose up -d --build
 #  ✔ Container infra-frontend-1  Started       2.0s 
 #  ✔ Container infra-nginx-1     Started       3.1s 
 ```
+12. Создаем миграции и выполняемя их:
+```bash
+docker-compose exec backend python manage.py makemigrations
+# в консоли будет выведено:
+# Migrations for 'api':
+#   api/migrations/0001_initial.py
+#     - Create model FavoriteRecipe
+#     - Create model Ingredient
+#     - Create model Recipe
+#     - Create model RecipeIngredient
+#     - Create model ShoppingCart
+#     - Create model Subscribe
+#     - Create model Tag
+#     ...
+# Migrations for 'users':
+#   users/migrations/0001_initial.py
+#     - Create model User
 
-15. Соберем статику:
+docker-compose exec backend python manage.py migrate
+# в консоли будет выведено:
+# Operations to perform:
+#   Apply all migrations: admin, api, auth, authtoken, contenttypes, sessions, users
+# Running migrations:
+#   Applying contenttypes.0001_initial... OK
+#   Applying contenttypes.0002_remove_content_type_name... OK
+#   Applying auth.0001_initial... OK
+#   Applying auth.0002_alter_permission_name_max_length... OK
+#   ...
+#   Applying authtoken.0003_tokenproxy... OK
+#   Applying sessions.0001_initial... OK
+```
+13. Создаем суперюзера(админа):
+```bash
+docker-compose exec backend python manage.py createsuperuser
+# в консоли будет выведено:
+# Email: adm@mail.ru
+# Имя пользователя: adm
+# Имя: adm
+# Фамилия: adm
+# Password: 
+# Password (again):
+```
+14. Соберем статику:
 ```bash
 docker-compose exec backend python manage.py collectstatic --no-input
 # в консоли будет выведено:
 # 160 static files copied to '/app/static'.
 ```
 
-
-
-16.  Переходим по адресу:
+14. Загружаем теги и ингридиенты:
 ```bash
-http://localhost/signin
+docker-compose exec backend python manage.py load_tags
+# Все тэги загружены!
+docker-compose exec backend python manage.py load_ingrs
+# Все ингридиенты загружены!
 ```
-
-17. Создаем аккаунт, вводим: 
+15. Переходим по адресу чтобы увидеть работу нашего сайта:
+```bash
+http://127.0.0.1/signin
+```
+16. Документация к API доступнапо адресу:
+```bash
+http://127.0.0.1/api/docs/
+```
+17. Создаем любой аккаунт, вводим: 
 ```bash
 # Например:
 Имя: test
@@ -241,7 +265,7 @@ http://localhost/signin
 # Далее уже заходим, добавляем рецепты и пользуемся сайтом в свое удовольствие!
 ```
 
-19. Остановка проекта, удаляем все контейнеры:
+19. Остановка проекта, удаление всех контейнеров:
 ```bash
 docker-compose down
 # в консоли будет выведено:
@@ -261,7 +285,7 @@ docker-compose down
 которые я выполнял здесь. Мне потребовалось значительное количество времени, чтобы разобраться с ним, особенно в отношении
 модуля "Управление проектом на удалённом сервере".
 Кратко опишу, что вам не нужно полностью копировать свой проект на удалённый сервер и там разворачивать postgresql и т.д., 
-как это было в 14-м спринте (а я делал именно так - это неверно). Вместо этого, все действия следует выполнить с помощью CI/CD. 
+как это было в 14-м спринте (а я делал именно так - это неверно). Вместо этого, все действия следует выполнять с помощью CI/CD. 
 Вам необходимо установить Docker и Docker-compose на удалённый сервер, скоприровать файлы docker-compose.yml и nginx.conf из 
 вашего проекта, добавить секреты Docker, базы данных, SSH_KEY и другие ваши секреты на GitHub (все секреты прописаны в 
 .github\workflows), и запустить команду. После завершения всех операций в Actions на GitHub, выполните несколько команд 
@@ -429,3 +453,30 @@ sudo docker-compose down
 ![api_6](https://github.com/artyom-vah/foodgram-project-react/blob/main/scrins/api_6.jpg)
 <br>
 ***Автор:*** Артем Вахрушев
+
+
+9. Переходим в папку backend/ производим миграции:  
+```bash
+cd backend/
+python manage.py makemigrations 
+python manage.py migrate
+```
+
+10. Загружаем данные ингридиентов и тегов для рецептов:
+```bash
+python manage.py load_tags
+# в консоли будет выведено:
+# Все тэги загружены!
+python manage.py load_ingrs
+# в консоли будет выведено:
+# Все ингридиенты загружены!
+```
+10. В папке с файлом manage.py запустите сервер:
+```bash
+python manage.py runserver
+```
+11. Проверим работу нашего api:
+```bash
+http://127.0.0.1:8000/api/
+http://127.0.0.1:8000/admin/
+```
