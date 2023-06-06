@@ -21,16 +21,16 @@ Foodgram поможет вам наслаждаться гастрономиче
 
 ## Проект доступен по ссылкам (для ревьюера):
 ```
-http://51.250.10.187/admin - Админка (обращаю внимание что надо вводить почту и пароль чтобы войти в админку)
-http://51.250.10.187/api/ - api для данного сервиса
-http://51.250.10.187/signup - Создать аккаунт
-http://51.250.10.187/signin - Вход/Выход
-http://51.250.10.187/recipes - рецепты
-http://51.250.10.187/subscriptions - подписки
-http://51.250.10.187/recipes/create - создать рецепт
-http://51.250.10.187/favorites - Избранное
-http://51.250.10.187/cart - Список покупок
-http://51.250.10.187/change-password - Изменить пароль
+http://158.160.57.66/admin - Админка (обращаю внимание что надо вводить почту и пароль чтобы войти в админку)
+http://158.160.57.66/api/ - api для данного сервиса
+http://158.160.57.66/signup - Создать аккаунт
+http://158.160.57.66/signin - Вход/Выход
+http://158.160.57.66/recipes - рецепты
+http://158.160.57.66/subscriptions - подписки
+http://158.160.57.66/recipes/create - создать рецепт
+http://158.160.57.66/favorites - Избранное
+http://158.160.57.66/cart - Список покупок
+http://158.160.57.66/change-password - Изменить пароль
 
 * - примечание: данные ссылки будут работать 2-3 дня после пуша на мой github, 
 далее виртуалка на яндекс облаке будет удалена и ссылки станут недоступны
@@ -106,7 +106,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-ALLOWED_HOSTS=* #51.250.10.187
+ALLOWED_HOSTS=* #158.160.57.66
 TIME_ZONE=UTC
 USE_TZ=True
 # * - примечание: хост должен быть ALLOWED_HOSTS=*
@@ -294,33 +294,48 @@ docker-compose down
 
 *****Если у вас заработал сайт на локальном компе и вы поняли как его запускть, это значит уже проделана половина работы!*****
 
-1. Создаем новую виртуальную машину Ubuntu 20.04 и делаем ваш 'Публичный IPv4' статическим.
-   
-2. Выполняем данные команды обновляем пакеты и устанавливаем docker и docker-compose на наш удаленный сервер:
+1. Создаем новую виртуальную машину Ubuntu 20.04 и делаем ваш 'Публичный IPv4' статическим, заходим на сервер ssh username@Публичный IPv4
 ```bash
-sudo apt update
-sudo apt upgrade -y 
-sudo apt install docker.io # подтверждаем Yes
-sudo apt install docker-compose # подтверждаем Yes
+ssh helllsin@158.160.57.66
 ```
-
-3. На github добавляем все нужные секреты:
+2. Обновляем пакеты на нашем удаленном сервере:
+```bash
+sudo apt update && sudo apt upgrade -y && sudo apt install curl -y
+```
+3. Устанавливаем docker и docker-compose на систему с использованием скрипта get-docker.sh
+```bash
+helllsin@foodgram:~$ sudo curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh && sudo rm get-docker.sh
+# ждем пока все не установится, может занять несколько минут
+```
+4. Обновляем docker-compose до версии 1.29.2, а также установливаем необходимые права и разрешения для выполнения этих операции.
+```bash
+ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+5. Устанавливаем исполняемые права на файл docker-compose.
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+6. Запускаем службу Docker настраиваем ее на автоматический запуск при загрузке системы.
+```bash
+sudo systemctl start docker.service && sudo systemctl enable docker.service
+```
+7. На github добавляем все нужные секреты:
 ```bash
 DOCKER_PASSWORD
 DOCKER_USERNAME
-HOST # это наш - Публичный IPv4 51.250.10.187
+HOST # это наш - Публичный IPv4 158.160.57.66
 PASSPHRASE  
 SSH_KEY # его узнаем на локально компе cat ~/.ssh/id_rsa
 TELEGRAM_TO
 TELEGRAM_TOKEN
 USER
 ```
-4. В файле settings.py у переменной DEBUG меняем значение:
+8. В файле settings.py у переменной DEBUG меняем значение:
 ```bash
 DEBUG = os.getenv('DEBUG', default=False)
 ```
 
-5. В файле .env прорисываем в переменной ALLOWED_HOSTS ваш 'Публичный IPv4'
+9. В файле .env прорисываем в переменной ALLOWED_HOSTS ваш 'Публичный IPv4'
 ```bash
 ALLOWED_HOSTS=Публичный IPv4
 у меня этот файл такой:
@@ -332,12 +347,12 @@ ALLOWED_HOSTS=Публичный IPv4
 # POSTGRES_PASSWORD=postgres
 # DB_HOST=db
 # DB_PORT=5432
-# ALLOWED_HOSTS=51.250.10.187
+# ALLOWED_HOSTS=158.160.57.66
 # TIME_ZONE=UTC
 # USE_TZ=True
 ```
 
-6. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба, лучше выложить на ваш dockerhub, создать и прописать свои образы:
+10. В папке infra/ в файле docker-compose.yml в сервисах закоментируем image для докер-хаба, лучше выложить на ваш dockerhub, создать и прописать свои образы:
 ```bash
 # Должно быть так:
 ...
@@ -350,77 +365,100 @@ frontend:
 #   image: foodgram_frontend # для запуская на локальном компе
   ...
 ```
+11. Создаем папку infra в домашней директории /home/username/ и переходим в нее:
+```bash
+cd ~
+mkdir infra
+cd infra/
+```
 
-7. Копируем файл docker-compose.yml и default.conf на удаленный сервер:
+12. Копируем файл docker-compose.yml, default.conf и файл .env на удаленный сервер:
 ```bash
 # я копировал файлы с локального компа на удаленный сервер так:
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@51.250.10.187:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\docker-compose.yml" helllsin@158.160.57.66:~/infra/
 
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@51.250.10.187:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\default.conf" helllsin@158.160.57.66:~/infra/
 
-scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@51.250.10.187:~/
+scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@158.160.57.66:~/infra/
 ```
 
-8. Выполняем данные команды т.к. у нас установилась старая версия docker-compose
-```bash
-# скорее всего вылезет такая ошибка:
-ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using 
-the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service 
-definitions under the `services` key, or omit the `version` key and place your service definitions at the root
-of the file to use version 1.
-
-# Удаляем остатки предыдущей установки Docker Compose:
-sudo rm /usr/local/bin/docker-compose
-
-# проверяем что файл Docker Compose не существует:
-ls -l /usr/local/bin/docker-compose
-
-# Загружаем и установите новую версию Docker Compose:
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Проверяем новую версию Docker Compose:
-docker-compose --version 
-# даже если версия осталась старой, можно после выполнения всех этих комад попробовать запустить sudo docker-compose up -d --build, если не сработает гуглим.
-```
-
-9. Собираем контейнеры, при помощи docker-compose:
+13. Собираем контейнеры, при помощи docker-compose:
 ```bash
 sudo docker-compose up -d --build
 # в консоли будет выведено:
-# [+] Running 15/15
-#  ✔ db 8 layers [⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                  10.3s
-#    ✔ 8921db27df28 Pull complete                                                                      1.5s
-#    ✔ eb286326f602 Pull complete                                                                      1.6s
-#    ✔ 63139c77dd7e Pull complete                                                                      1.8s
-#    ✔ 17baeacd3984 Pull complete                                                                      7.5s
-#    ✔ 5f08b9782916 Pull complete                                                                      7.7s
-#    ✔ a836be7ad658 Pull complete                                                                      7.9s
-#    ✔ 1966853affaf Pull complete                                                                      8.0s
-#    ✔ 4dc6d2c8dede Pull complete                                                                      8.1s
-#  ✔ nginx 5 layers [⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                   9.9s
-#    ✔ bb79b6b2107f Pull complete                                                                      3.8s
-#    ✔ 111447d5894d Pull complete                                                                      6.1s
-#    ✔ a95689b8e6cb Pull complete                                                                      6.5s
-#    ✔ 1a0022e444c2 Pull complete                                                                      7.5s
-#    ✔ 32b7488a3833 Pull complete                                                                      7.7s
-# [+] Building 0.0s (0/0)
-# [+] Running 9/9
-#  ✔ Network helllsin_default         Created                                                          0.1s
-#  ✔ Volume "helllsin_static_value"   Created                                                          0.0s
-#  ✔ Volume "helllsin_media_value"    Created                                                          0.0s
-#  ✔ Volume "helllsin_postgres_data"  Created                                                          0.0s
-#  ✔ Volume "helllsin_data_value"     Created                                                          0.0s
-#  ✔ Container helllsin-db-1          Started                                                          4.6s
-#  ✔ Container helllsin-backend-1     Started                                                          3.5s
-#  ✔ Container helllsin-frontend-1    Started                                                          3.9s
-#  ✔ Container helllsin-nginx-1       Started                                                          4.8s
+# Creating network "infra_default" with the default driver
+# Creating volume "infra_postgres_data" with default driver
+# Creating volume "infra_static_value" with default driver
+# Creating volume "infra_media_value" with default driver
+# Creating volume "infra_data_value" with default driver
+# Pulling db (postgres:14.6-alpine)...
+# 14.6-alpine: Pulling from library/postgres
+# 8921db27df28: Pull complete
+# ...
+# 32b7488a3833: Pull complete
+# Digest: sha256:ed7f815851b5299f616220a63edac69a4cc200e7f536a56e421988da82e44ed8
+# Status: Downloaded newer image for nginx:1.19.3
+# Creating infra_db_1 ... done
+# Creating infra_backend_1 ... done
+# Creating infra_frontend_1 ... done
+# Creating infra_nginx_1    ... done
 ```
-
-10. Выполняем команды:
+14.  Выполняем команды для установки и удаления и запускаем опять:
+```bash
+sudo docker-compose stop
+sudo docker-compose down -v
+sudo docker-compose up -d --build
+```
+15.  Выполняем команды:
 ```bash
 sudo docker-compose exec backend python manage.py makemigrations
-sudo docker-compose exec backend python manage.py migrate
+# в консоли будет выведено:
+# Migrations for 'api':
+#   api/migrations/0001_initial.py
+#     - Create model FavoriteRecipe
+#     - Create model Ingredient
+#     - Create model Recipe
+#     - Create model RecipeIngredient
+#     - Create model ShoppingCart
+#     - Create model Subscribe
+#     - Create model Tag
+#   api/migrations/0002_initial.py
+#     - Add field author to subscribe
+#     - Add field user to subscribe
+#     - Add field recipe to shoppingcart
+#     - Add field user to shoppingcart
+#     - Add field ingredient to recipeingredient
+#     - Add field recipe to recipeingredient
+#     - Add field author to recipe
+#     - Add field ingredients to recipe
+#     - Add field tags to recipe
+#     - Add field recipe to favoriterecipe
+#     - Add field user to favoriterecipe
+#     - Create constraint unique_subscription on model subscribe
+#     - Create constraint unique ingredient on model recipeingredient
+# Migrations for 'users':
+#   users/migrations/0001_initial.py
+#     - Create model User
+```
+16.  Выполняем команды:
+```bash
+sudo docker-compose exec backend python manage.py migrate --noinput
+# в консоли будет выведено:
+# Operations to perform:
+#   Apply all migrations: admin, api, auth, authtoken, contenttypes, sessions, users
+# Running migrations:
+#   Applying contenttypes.0001_initial... OK
+#   Applying contenttypes.0002_remove_content_type_name... OK
+#   Applying auth.0001_initial... OK
+#   Applying auth.0002_alter_permission_name_max_length... OK
+#   Applying auth.0003_alter_user_email_max_length... OK
+#   Applying auth.0004_alter_user_username_opts... OK
+#   Applying auth.0005_alter_user_last_login_null... OK
+  # Applying authtoken.0003_tokenproxy... OK
+  # Applying sessions.0001_initial... OK
+```
+17. Создаем суперюзера(админа)::
+```bash
 sudo docker-compose exec backend python manage.py createsuperuser
 # создаем админа:
 # Email:               adm@mail.ru
@@ -428,7 +466,9 @@ sudo docker-compose exec backend python manage.py createsuperuser
 # Имя:                 adm
 # Password:            adm
 # Password (again):    adm
-
+```
+18. Собераем статику и загружаем теги и ингридиенты::
+```bash
 sudo docker-compose exec backend python manage.py collectstatic --no-input
 # 160 static files copied to '/code/static'.
 
@@ -439,16 +479,9 @@ sudo docker-compose exec backend python manage.py load_ingrs
 # Все ингридиенты загружены!
 ```
 
-11. Остановка проекта, удаляем все контейнеры:
+19. Остановка проекта, удаляем все контейнеры:
 ```bash
 sudo docker-compose down
-# в консоли будет выведено:
-# [+] Running 5/4
-#  ✔ Container infra-nginx-1      Removed                                    0.3s
-#  ✔ Container infra-frontend-1   Removed                                    0.7s
-#  ✔ Container infra-backend-1    Removed                                    0.8s
-#  ✔ Container infra-db-1         Removed                                    0.1s
-#  ✔ Network infra_default        Removed                                    0.1s
 ```
 
 **Пример готового проекта**
