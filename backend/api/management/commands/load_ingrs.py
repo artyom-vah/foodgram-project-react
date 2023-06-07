@@ -1,9 +1,8 @@
 import csv
 
-from django.conf import settings
-from django.core.management import BaseCommand
-
 from api.models import Ingredient
+from django.conf import settings
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

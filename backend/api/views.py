@@ -21,14 +21,14 @@ from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAdminOrReadOnly
+from api.serializers import (IngredientSerializer, RecipeReadSerializer,
+                             RecipeWriteSerializer, SubscribeRecipeSerializer,
+                             SubscribeSerializer, TagSerializer,
+                             TokenSerializer, UserCreateSerializer,
+                             UserListSerializer, UserPasswordSerializer)
+from api.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
+                        Subscribe, Tag)
 
-from .models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
-                     Subscribe, Tag)
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, SubscribeRecipeSerializer,
-                          SubscribeSerializer, TagSerializer, TokenSerializer,
-                          UserCreateSerializer, UserListSerializer,
-                          UserPasswordSerializer)
 
 User = get_user_model()
 FILENAME = 'shoppingcart.pdf'

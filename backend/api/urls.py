@@ -5,6 +5,7 @@ from api.views import (AddAndDeleteSubscribe, AddDeleteFavoriteRecipe,
                        AddDeleteShoppingCart, AuthToken, IngredientsViewSet,
                        RecipesViewSet, TagsViewSet, UsersViewSet, set_password)
 
+
 app_name = 'api'
 
 router = DefaultRouter()
