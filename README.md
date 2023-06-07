@@ -454,8 +454,8 @@ sudo docker-compose exec backend python manage.py migrate --noinput
 #   Applying auth.0003_alter_user_email_max_length... OK
 #   Applying auth.0004_alter_user_username_opts... OK
 #   Applying auth.0005_alter_user_last_login_null... OK
-  # Applying authtoken.0003_tokenproxy... OK
-  # Applying sessions.0001_initial... OK
+#   Applying authtoken.0003_tokenproxy... OK
+#   Applying sessions.0001_initial... OK
 ```
 17. Создаем суперюзера(админа)::
 ```bash
