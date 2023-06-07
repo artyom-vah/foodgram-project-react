@@ -20,14 +20,14 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
 from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
+from api.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
+                        Subscribe, Tag)
 from api.permissions import IsAdminOrReadOnly
 from api.serializers import (IngredientSerializer, RecipeReadSerializer,
                              RecipeWriteSerializer, SubscribeRecipeSerializer,
                              SubscribeSerializer, TagSerializer,
                              TokenSerializer, UserCreateSerializer,
                              UserListSerializer, UserPasswordSerializer)
-from api.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
-                        Subscribe, Tag)
 
 
 User = get_user_model()

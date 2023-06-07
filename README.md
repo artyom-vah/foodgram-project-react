@@ -74,6 +74,8 @@ cd backend/
 3. В папке backend/ создаем вируальное акружение venv:
 ```bash
 python -m venv venv
+```
+```bash
 source venv/Scripts/activate
 ```
 или сразу так:
@@ -87,13 +89,19 @@ python -m pip install --upgrade pip
 5. Установите зависимости из файла requirements.txt:
 ```bash
 pip install -r requirements.txt
+```
+```bash
 # * - примечание: в случае если что-то не установится или будет какая-то ошибка, 
 # то устанавливайте по одному пакету из файла requirements.txt (у меня лично таких ошибок не было)
 ```
 6. В случае если в infra/ нет файла.env, то создаем его в папке infra/:
 ```bash
 cd ..
+```
+```bash
 cd infra/
+```
+```bash
 touch .env
 ```
 7. В нем прописываем 
@@ -133,9 +141,13 @@ frontend:
 
 10. Запустим докер-файлы backend и frontend:
 ```bash
-# в консоли будет выведено:
 cd backend/
+```
+```bash
 docker build -t foodgram_backend .
+```
+```bash
+# в консоли будет выведено:
 # [+] Building 1.9s (10/10) FINISHED
 #  => [internal] load .dockerignore                                                                           0.0s 
 #  => => transferring context: 2B                                                                             0.0s 
@@ -146,10 +158,14 @@ docker build -t foodgram_backend .
 #  => [internal] load build context                         
 #  ...
 #  => => naming to docker.io/library/foodgram_backend  
-
-
+```
+```bash
 cd frontend/
+```
+```bash
 docker build -t foodgram_frontend .
+```
+```bash
 # в консоли будет выведено:
 # [+] Building 4.8s (12/12) FINISHED
 #  => [internal] load build definition from Dockerfile       0.0s 
@@ -162,7 +178,11 @@ docker build -t foodgram_frontend .
 11. Переходим в папку infra/ пересобераем контейнеры и запускаем их 
 ```bash
 cd infra/
+```
+```bash
 docker-compose up -d --build
+```
+```bash
 # Первый раз в консоли будет выведено:
 # [+] Running 15/2
 #  ✔ nginx 5 layers [⣿⣿⣿⣿⣿]     0B/0B     Pulled     9.5s 
@@ -173,9 +193,12 @@ docker-compose up -d --build
 #  ✔ Container foodgram_frontend  Started    1.6s 
 #  ✔ Container foodgram_backend   Started    1.4s 
 #  ✔ Container foodgram_nginx     Started 
-
+```
 далее при следующих запусках выполнении команды:
+```bash
 docker-compose up -d --build 
+```
+```bash
 # в консоли будет выведено:
 # [+] Running 5/5
 #  ✔ Network infra_default       Created         0s 
@@ -187,6 +210,8 @@ docker-compose up -d --build
 12. Создаем миграции и выполняемя их:
 ```bash
 docker-compose exec backend python manage.py makemigrations
+```
+```bash
 # в консоли будет выведено:
 # Migrations for 'api':
 #   api/migrations/0001_initial.py
@@ -201,8 +226,11 @@ docker-compose exec backend python manage.py makemigrations
 # Migrations for 'users':
 #   users/migrations/0001_initial.py
 #     - Create model User
-
+```
+```bash
 docker-compose exec backend python manage.py migrate
+```
+```bash
 # в консоли будет выведено:
 # Operations to perform:
 #   Apply all migrations: admin, api, auth, authtoken, contenttypes, sessions, users
@@ -218,6 +246,8 @@ docker-compose exec backend python manage.py migrate
 13. Создаем суперюзера(админа):
 ```bash
 docker-compose exec backend python manage.py createsuperuser
+```
+```bash
 # в консоли будет выведено:
 # Email: adm@mail.ru
 # Имя пользователя: adm
@@ -229,6 +259,8 @@ docker-compose exec backend python manage.py createsuperuser
 14. Соберем статику:
 ```bash
 docker-compose exec backend python manage.py collectstatic --no-input
+```
+```bash
 # в консоли будет выведено:
 # 160 static files copied to '/app/static'.
 ```
@@ -236,8 +268,16 @@ docker-compose exec backend python manage.py collectstatic --no-input
 15. Загружаем теги и ингридиенты:
 ```bash
 docker-compose exec backend python manage.py load_tags
+```
+```bash
+# в консоли будет выведено:
 # Все тэги загружены!
+```
+```bash
 docker-compose exec backend python manage.py load_ingrs
+```
+```bash
+# в консоли будет выведено:
 # Все ингридиенты загружены!
 ```
 16. Переходим по адресу чтобы увидеть работу нашего сайта:
@@ -268,6 +308,8 @@ http://127.0.0.1/api/docs/
 20. Остановка проекта, удаление всех контейнеров:
 ```bash
 docker-compose down
+```
+```bash
 # в консоли будет выведено:
 # [+] Running 5/5
 #  ✔ Container infra-nginx-1     Removed              0.5s 
@@ -368,7 +410,11 @@ frontend:
 11. Создаем папку infra в домашней директории /home/username/ и переходим в нее:
 ```bash
 cd ~
+```
+```bash
 mkdir infra
+```
+```bash
 cd infra/
 ```
 
@@ -385,6 +431,8 @@ scp "D:\Dev\PUBLIC_REP\foodgram-project-react\infra\.env" helllsin@158.160.57.66
 13. Собираем контейнеры, при помощи docker-compose:
 ```bash
 sudo docker-compose up -d --build
+```
+```bash
 # в консоли будет выведено:
 # Creating network "infra_default" with the default driver
 # Creating volume "infra_postgres_data" with default driver
@@ -406,12 +454,18 @@ sudo docker-compose up -d --build
 14.  Выполняем команды для установки и удаления и запускаем опять:
 ```bash
 sudo docker-compose stop
+```
+```bash
 sudo docker-compose down -v
+```
+```bash
 sudo docker-compose up -d --build
 ```
 15.  Выполняем команды:
 ```bash
 sudo docker-compose exec backend python manage.py makemigrations
+```
+```bash
 # в консоли будет выведено:
 # Migrations for 'api':
 #   api/migrations/0001_initial.py
@@ -443,6 +497,8 @@ sudo docker-compose exec backend python manage.py makemigrations
 16.  Выполняем команды:
 ```bash
 sudo docker-compose exec backend python manage.py migrate --noinput
+```
+```bash
 # в консоли будет выведено:
 # Operations to perform:
 #   Apply all migrations: admin, api, auth, authtoken, contenttypes, sessions, users
@@ -460,6 +516,8 @@ sudo docker-compose exec backend python manage.py migrate --noinput
 17. Создаем суперюзера(админа)::
 ```bash
 sudo docker-compose exec backend python manage.py createsuperuser
+```
+```bash
 # создаем админа:
 # Email:               adm@mail.ru
 # Имя пользователя:    adm
@@ -471,17 +529,26 @@ sudo docker-compose exec backend python manage.py createsuperuser
 ```bash
 sudo docker-compose exec backend python manage.py collectstatic --no-input
 # 160 static files copied to '/code/static'.
-
+```
+```bash
 sudo docker-compose exec backend python manage.py load_tags
 # Все тэги загружены!
-
+```
+```bash
 sudo docker-compose exec backend python manage.py load_ingrs
 # Все ингридиенты загружены!
 ```
-
 19. Остановка проекта, удаляем все контейнеры:
 ```bash
 sudo docker-compose down
+```
+20. Переходим по ссылке чтобы посмотреть работу нашего сайта:
+```bash
+http://158.160.57.66/
+```
+21. Документация апи доступна по ссылке:
+```bash
+http://127.0.0.1/api/docs/
 ```
 
 **Пример готового проекта**
